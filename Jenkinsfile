@@ -12,10 +12,18 @@ pipeline {
             }
         }
         stage('Run Docker Container') {
-            steps {
-                sh 'docker run -d -p 3000:3000 --name my-app-container my-app:latest'
-            }
+    steps {
+        script {
+            // Stop and remove the existing container (ignore errors if not found)
+            sh 'docker stop my-app-container || true'
+            sh 'docker rm my-app-container || true'
+
+            // Run the new container
+            sh 'docker run -d -p 3000:3000 --name my-app-container my-app:latest'
         }
+    }
+}
+
     }
 }
 
